@@ -1,0 +1,16 @@
+# Imgur Album Downloader
+imgur_dl() {
+	if [ $# -lt 1 ]; then
+		echo "Usage : imgur_dl <IMGUR_URL> <Optional Destination>"
+		return;
+	fi
+	wget -q $1 -O /tmp/imgur_dl.html
+	sed -n 's|.*<meta property="og:image" *content="\(.*\)".*|\1|p' /tmp/imgur_dl.html > /tmp/imgur_urls
+	if [ $# -eq 2 ]; then
+		w -i /tmp/imgur_urls -P $2
+	else
+		w -i /tmp/imgur_urls -P "imgur/$1/"
+	fi
+	rm /tmp/imgur_dl.html
+	rm /tmp/imgur_urls
+}
